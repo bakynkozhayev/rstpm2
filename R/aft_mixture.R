@@ -85,7 +85,11 @@ aft_mixture <- function(formula, data, smooth.formula = NULL, df = 3,
     ## glm(y ~ X, family=binomial)
     ## browser()
     ## glm.cure.obj <- eval(glm.cure.call, envir=parent.frame())
-    glm.cure.obj <- eval(glm.cure.call, data)
+
+    # eval will not search parent.frame() if envir is not a list or pairlist
+    glm.cure.obj <- eval(glm.cure.call, 
+                         envir = as.list(environment()), 
+                         enclos = parent.frame())
     Xc = model.matrix(glm.cure.obj, data)
     ##
     ## pred1 <- predict(survreg1)
